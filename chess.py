@@ -107,6 +107,12 @@ class Board:
 			for column_number in range(len(self.board[row_number])):
 				Piece(self.board[row_number][column_number],[column_number,row_number]).blit_piece()
 
+	def move_piece(self,prev_pos,next_pos):
+		#print(prev_pos[0],prev_pos[1])
+		#print(next_pos[0],next_pos[1])
+		board.board[next_pos[0]][next_pos[1]] = board.board[prev_pos[0]][prev_pos[1]]
+		board.board[prev_pos[0]][prev_pos[1]] = ""
+
 class Piece:
 	def __init__(self, name, pos):
 		self.name = name
@@ -135,6 +141,10 @@ def game_loop():
 		for event in pg.event.get():
 			if event.type == pg.QUIT:
 				exit_game()
+			if event.type == pg.KEYDOWN:
+				if event.key == pg.K_SPACE:
+					board.move_piece([0,0],[3,0])
+					#board.print_board()
 		
 		board.blit_board()
 		board.blit_pieces()
