@@ -87,7 +87,7 @@ class Button:
 
 class Board:
 	def __init__(self):
-		self.board = [[""] * 8] * 8
+		self.board = [["" for i in range(8)] for j in range(8)]
 		self.board[0] = ["br","bn","bb","bq","bk","bb","bn","br"]
 		self.board[1] = ["bp"] * 8
 		self.board[6] = ["wp"] * 8
@@ -106,6 +106,10 @@ class Board:
 		for row_number in range(len(self.board)):
 			for column_number in range(len(self.board[row_number])):
 				Piece(self.board[row_number][column_number],[column_number,row_number]).blit_piece()
+
+	def move_piece(self,prev_pos,next_pos):
+		board.board[next_pos[0]][next_pos[1]] = board.board[prev_pos[0]][prev_pos[1]]
+		board.board[prev_pos[0]][prev_pos[1]] = ""
 
 class Piece:
 	def __init__(self, name, pos):
@@ -130,7 +134,6 @@ def game_loop():
 	global board
 	in_game = True
 	board = Board()
-	#board.print_board()
 	while in_game:
 		for event in pg.event.get():
 			if event.type == pg.QUIT:
