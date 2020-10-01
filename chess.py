@@ -138,7 +138,8 @@ def game_loop():
 		for event in pg.event.get():
 			if event.type == pg.QUIT:
 				exit_game()
-		
+			if event.type == pg.MOUSEBUTTONDOWN:
+				pass#print("Pressed")
 		board.blit_board()
 		board.blit_pieces()
 		pg.display.update()
