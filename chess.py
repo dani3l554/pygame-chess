@@ -7,6 +7,7 @@ import pygame as pg
 from os import listdir
 from sys import warnoptions
 from math import floor
+import valid_moves
 
 #Turns off silly deprecation warnings
 if not warnoptions:
@@ -112,12 +113,17 @@ class Board:
 				Piece(self.board[row_number][column_number],[column_number,row_number]).blit_piece()
 
 	def move_piece(self,prev_pos,next_pos):
-		board.board[next_pos[0]][next_pos[1]] = board.board[prev_pos[0]][prev_pos[1]]
-		board.board[prev_pos[0]][prev_pos[1]] = ""
+		self.board[next_pos[1]][next_pos[0]] = self.board[prev_pos[1]][prev_pos[0]]
+		self.board[prev_pos[1]][prev_pos[0]] = ""
 
 	def handle_click(self, pos):
 		board_square = (floor(pos[0]/50),floor(pos[1]/50))
-		board.selected = board_square
+		if self.selected == ():
+			self.selected = board_square
+		else:
+			if valid_moves.check_valid(self.board[self.selected[0]][self.selected[1]], self.selected, board_square):
+				self.move_piece(self.selected, board_square)
+				self.selected = ()
 
 class Piece:
 	def __init__(self, name, pos):
