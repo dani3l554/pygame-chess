@@ -4,13 +4,14 @@ By Daniel Nicholson
 """
 
 import pygame as pg
-import os
-import sys
+from os import listdir
+from sys import warnoptions
+from math import floor
 
 #Turns off silly deprecation warnings
-if not sys.warnoptions:
-    import warnings
-    warnings.simplefilter("ignore")
+if not warnoptions:
+    from warnings import simplefilter
+    simplefilter("ignore")
 
 pg.init()
 
@@ -26,7 +27,7 @@ menu_background = pg.image.load("menu_background.png")
 board_img = pg.image.load("board.png")
 
 pieces_img = {}
-for file in os.listdir(r"pieces/"):
+for file in listdir(r"pieces/"):
 	pieces_img[file.split(".")[0]] = pg.image.load("pieces/" + file)
 
 clock = pg.time.Clock()
@@ -94,6 +95,7 @@ class Board:
 		self.board[7] = ["wr","wn","wb","wq","wk","wb","wn","wr"]
 		self.w = 400
 		self.h = 400
+		self.selected = ()
 	
 	def print_board(self):
 		for row in self.board:
@@ -101,6 +103,8 @@ class Board:
 
 	def blit_board(self):
 		display.blit(board_img,(0,0))
+		if self.selected != ():
+			pg.draw.rect(display,BLACK,(self.selected[0]*50,self.selected[1]*50,50,50),4)
 
 	def blit_pieces(self):
 		for row_number in range(len(self.board)):
@@ -110,6 +114,10 @@ class Board:
 	def move_piece(self,prev_pos,next_pos):
 		board.board[next_pos[0]][next_pos[1]] = board.board[prev_pos[0]][prev_pos[1]]
 		board.board[prev_pos[0]][prev_pos[1]] = ""
+
+	def handle_click(self, pos):
+		board_square = (floor(pos[0]/50),floor(pos[1]/50))
+		board.selected = board_square
 
 class Piece:
 	def __init__(self, name, pos):
@@ -139,7 +147,8 @@ def game_loop():
 			if event.type == pg.QUIT:
 				exit_game()
 			if event.type == pg.MOUSEBUTTONDOWN:
-				pass#print("Pressed")
+				mouse_pos = pg.mouse.get_pos()
+				board.handle_click(mouse_pos)
 		board.blit_board()
 		board.blit_pieces()
 		pg.display.update()
