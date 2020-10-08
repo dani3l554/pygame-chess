@@ -121,9 +121,9 @@ class Board:
 		if self.selected == ():
 			self.selected = board_square
 		else:
-			if valid_moves.check_valid(self.board[self.selected[0]][self.selected[1]], self.selected, board_square):
+			if valid_moves.check_valid(self.board[self.selected[1]][self.selected[0]], self.selected, board_square, self.board):
 				self.move_piece(self.selected, board_square)
-				self.selected = ()
+			self.selected = ()
 
 class Piece:
 	def __init__(self, name, pos):
