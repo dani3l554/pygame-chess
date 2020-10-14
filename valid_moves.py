@@ -12,8 +12,11 @@ def check_valid(name,prev_pos,next_pos,board):
 	elif name[1] == "q":
 		return True
 	elif name[1] == "b":
-		if prev_pos[0] - next_pos[0] == prev_pos[1] - next_pos[1] or prev_pos[0] + next_pos[0] == prev_pos[1] + next_pos[1]:
-			return True
+		try:
+			if (prev_pos[0] - next_pos[0]) / (prev_pos[1] - next_pos[1]) in (1,-1):
+				return True
+		except ZeroDivisionError:
+			pass
 		return False
 	elif name[1] == "n":
 		if prev_pos[0] - next_pos[0] in (-2,-1,1,2):
